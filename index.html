@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A tiny pitch</title>
+<style>
+:root { color-scheme: light dark; --bg: light-dark(#fff8f5,#171318); --surface: light-dark(#ffffff,#241e25); --ink: light-dark(#2c2028,#fff4f7); --muted: light-dark(#786872,#c7b8c2); --accent: light-dark(#d94f79,#ff7da4); --accent2: light-dark(#f4b7c9,#5c3447); --line: light-dark(#f0dce4,#493642); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+#app { min-height: 100vh; width: 100%; background: var(--bg); border-radius: 0; padding: 22px; display: flex; flex-direction: column; align-items: center; }
+.top { width: min(760px,100%); display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; }
+.pill { border:1px solid var(--line); border-radius:99px; padding:7px 11px; letter-spacing:0; text-transform:none; }
+.deck { width:min(760px,100%); flex:1; display:flex; flex-direction:column; justify-content:center; padding:34px 0 22px; }
+.slide { display:none; animation: rise .32s ease both; }
+.slide.active { display:block; }
+@keyframes rise { from {opacity:0; transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
+.kicker { color:var(--accent); font-weight:800; text-transform:uppercase; letter-spacing:.14em; font-size:.78rem; margin-bottom:14px; }
+h1 { font-size:clamp(2.5rem,8vw,5.1rem); line-height:.99; letter-spacing:-.065em; margin:0 0 20px; max-width:700px; }
+h2 { font-size:clamp(1.9rem,5vw,3.1rem); letter-spacing:-.045em; line-height:1.04; margin:0 0 16px; }
+p { color:var(--muted); font-size:1.08rem; line-height:1.65; max-width:620px; }
+.em { color:var(--accent); }
+.panel { background:var(--surface); border:1px solid var(--line); border-radius:25px; padding:clamp(20px,5vw,32px); box-shadow:0 16px 50px #6f34500d; }
+.field { display:flex; flex-direction:column; gap:8px; margin:18px 0; }
+label { color:var(--muted); font-size:.9rem; font-weight:650; }
+input, textarea { font:inherit; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:14px 15px; width:100%; outline:none; }
+input:focus, textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent); }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:20px 0; }
+.choice { cursor:pointer; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:16px; padding:15px; text-align:left; font:inherit; transition:.18s; min-height:58px; }
+.choice:hover,.choice.selected { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 11%,var(--surface)); transform:translateY(-1px); }
+.choice small { display:block; color:var(--muted); margin-top:5px; }
+.actions { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:28px; }
+button { font:inherit; }
+.primary,.secondary { border:0; border-radius:999px; padding:13px 20px; font-weight:750; cursor:pointer; }
+.primary { background:var(--accent); color:white; }
+.secondary { background:transparent; color:var(--muted); border:1px solid var(--line); }
+.primary:hover { filter:brightness(1.04); transform:translateY(-1px); }
+.progress { width:min(760px,100%); height:4px; background:var(--line); border-radius:9px; overflow:hidden; }
+.bar { width:12.5%; height:100%; background:var(--accent); transition:width .25s; }
+.note { font-size:.86rem; line-height:1.5; }
+.heart { font-size:2rem; margin-bottom:16px; }
+.result { white-space:pre-wrap; background:var(--bg); border:1px dashed var(--line); border-radius:15px; padding:15px; line-height:1.55; color:var(--ink); }
+footer { width:min(760px,100%); display:flex; justify-content:space-between; gap:12px; color:var(--muted); font-size:.78rem; padding:16px 0 4px; }
+@media(max-width:520px){ #app{padding:17px}.grid{grid-template-columns:1fr}.actions{gap:8px}.primary,.secondary{padding:12px 15px} }
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top"><span>THE SOFT-LAUNCH DECK</span><span class="pill" id="count">01 / 08</span></div>
+  <main class="deck">
+    <section class="slide active" data-n="0">
+      <div class="kicker">A very unserious presentation</div>
+      <h1>Okay, I think you're <span class="em">really cool.</span></h1>
+      <p>So instead of sending the world's most basic “hey”, I made a tiny pitch deck. Slightly extra? Absolutely. Worth it? Let's find out.</p>
+      <div class="actions"><span class="note">No pressure. Just curiosity ✨</span><button class="primary next">Let's see →</button></div>
+    </section>
+    <section class="slide" data-n="1">
+      <div class="kicker">Chapter 01 · The introduction</div>
+      <div class="panel">
+        <h2>First things first… <span class="em">what's your name?</span></h2>
+        <p>Can't keep calling you “the cool girl” in my head. That would be a little ridiculous.</p>
+        <div class="field"><label for="herName">Your name</label><input id="herName" placeholder="What should I call you?" autocomplete="given-name"></div>
+        <div class="actions"><button class="secondary back">← Back</button><button class="primary next">Next →</button></div>
+      </div>
+    </section>
+    <section class="slide" data-n="2">
+      <div class="kicker">Chapter 02 · Age check</div>
+      <div class="panel">
+        <h2>I'm 18. <span class="em">What about you?</span></h2>
+        <p>Just getting the basics out of the way before this deck gets any more dramatic.</p>
+        <div class="field"><label for="herAge">Your age</label><input id="herAge" type="number" min="13" max="99" placeholder="Your age"></div>
+        <div class="actions"><button class="secondary back">← Back</button><button class="primary next">Fair enough →</button></div>
+      </div>
+    </section>
+    <section class="slide" data-n="3">
+      <div class="kicker">Chapter 03 · About me</div>
+      <h2>A few things about <span class="em">your presenter.</span></h2>
+      <div class="grid">
+        <div class="panel"><div class="heart">🏋️</div><strong>Gym time</strong><p class="note">I like training and getting stronger. Yes, I probably mention the gym more than necessary.</p></div>
+        <div class="panel"><div class="heart">🏀</div><strong>Sports</strong><p class="note">I enjoy playing sports and being a little competitive.</p></div>
+        <div class="panel"><div class="heart">🌆</div><strong>Going out</strong><p class="note">I'm always down for a good plan, good food, and a change of scenery.</p></div>
+        <div class="panel"><div class="heart">🙂</div><strong>The vibe</strong><p class="note">I like good conversations, playful banter, and people who are themselves.</p></div>
+      </div>
+      <div class="actions"><button class="secondary back">← Back</button><button class="primary next">Your turn →</button></div>
+    </section>
+    <section class="slide" data-n="4">
+      <div class="kicker">Chapter 04 · Your turn</div>
+      <div class="panel">
+        <h2>What are <span class="em">you</span> into?</h2>
+        <p>Pick as many as you like. Or add your own answer — I'm curious.</p>
+        <div class="grid" id="hobbies">
+          <button class="choice" data-value="Gym / fitness">🏋️ Gym / fitness</button>
+          <button class="choice" data-value="Sports">⚽ Sports</button>
+          <button class="choice" data-value="Going out">🌃 Going out</button>
+          <button class="choice" data-value="Movies / shows">🍿 Movies / shows</button>
+          <button class="choice" data-value="Music">🎧 Music</button>
+          <button class="choice" data-value="Trying new places">🍜 Trying new places</button>
+        </div>
+        <div class="field"><label for="otherHobby">Anything else?</label><input id="otherHobby" placeholder="A hobby, obsession, hidden talent…"></div>
+        <div class="actions"><button class="secondary back">← Back</button><button class="primary next">Interesting… →</button></div>
+      </div>
+    </section>
+    <section class="slide" data-n="5">
+      <div class="kicker">Chapter 05 · A tiny confession</div>
+      <div class="panel">
+        <div class="heart">👀💗</div>
+        <h2>Not to be obvious, but… <span class="em">your eyes are really pretty.</span></h2>
+        <p>And you seem like someone I'd genuinely like to know better. That is the whole confession. I'll now attempt to act normal.</p>
+        <div class="actions"><button class="secondary back">← Back</button><button class="primary next">You survived the compliment →</button></div>
+      </div>
+    </section>
+    <section class="slide" data-n="6">
+      <div class="kicker">Chapter 06 · The date committee</div>
+      <div class="panel">
+        <h2>What's your ideal <span class="em">first date?</span></h2>
+        <p>There are no wrong answers. (Unless you say a three-hour tax seminar. Then I have questions.)</p>
+        <div class="grid" id="dates">
+          <button class="choice" data-value="Coffee + a long conversation">☕ Coffee + conversation</button>
+          <button class="choice" data-value="Dinner somewhere nice">🍝 Dinner somewhere nice</button>
+          <button class="choice" data-value="An activity / mini adventure">🎳 An activity / mini adventure</button>
+          <button class="choice" data-value="Walk + ice cream">🍦 Walk + ice cream</button>
+          <button class="choice" data-value="Something spontaneous">🎲 Something spontaneous</button>
+          <button class="choice" data-value="Honestly, depends on the person">✨ Depends on the person</button>
+        </div>
+        <div class="field"><label for="dateIdea">Your dream date in your own words</label><input id="dateIdea" placeholder="Tell me your ideal plan…"></div>
+        <div class="actions"><button class="secondary back">← Back</button><button class="primary next">One last question →</button></div>
+      </div>
+    </section>
+    <section class="slide" data-n="7">
+      <div class="kicker">Final chapter · The actual point</div>
+      <div class="panel">
+        <div class="heart">🫶</div>
+        <h2>So… should we <span class="em">get to know each other?</span></h2>
+        <p>Zero pressure. I just thought you seemed cool, and I'd rather say hi than wonder what would've happened.</p>
+        <div class="grid" id="interest">
+          <button class="choice" data-value="Yes, let's talk">😊 Yes, let's talk</button>
+          <button class="choice" data-value="Maybe — tell me more">👀 Maybe — tell me more</button>
+          <button class="choice" data-value="Friends first">🤝 Friends first</button>
+          <button class="choice" data-value="Not interested">🌷 Not interested</button>
+        </div>
+        <div class="field"><label for="message">Anything you want to say back?</label><textarea id="message" rows="3" placeholder="Your reply…"></textarea></div>
+        <button class="primary" id="makeReply" style="width:100%">Make my reply ✨</button>
+        <div id="replyWrap" hidden style="margin-top:18px"><p class="note">Here's your reply, ready to copy and send back to me:</p><div class="result" id="replyText"></div><button class="primary" id="copyReply" style="margin-top:12px;width:100%">Copy reply</button><p id="copied" class="note" aria-live="polite"></p></div>
+        <p class="note" style="margin-top:20px">Tiny tech note: this preview doesn't send me a notification or upload your answers anywhere. You can copy the reply and send it to me directly. Automatic notifications would need a connected form/backend.</p>
+        <div class="actions"><button class="secondary back">← Back</button><button class="secondary" id="restart">Start over ↺</button></div>
+      </div>
+    </section>
+  </main>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <footer><span>Made with a little courage.</span><span>Respectfully shooting my shot.</span></footer>
+</div>
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+let current = 0;
+const selections = { hobbies: new Set(), dates: new Set(), interest: new Set() };
+function show(n) { current = Math.max(0, Math.min(slides.length - 1, n)); slides.forEach((s,i)=>s.classList.toggle('active',i===current)); document.getElementById('count').textContent = `${String(current+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`; document.getElementById('bar').style.width = `${((current+1)/slides.length)*100}%`; window.scrollTo({top:0,behavior:'smooth'}); }
+document.querySelectorAll('.next').forEach(b=>b.addEventListener('click',()=>show(current+1)));
+document.querySelectorAll('.back').forEach(b=>b.addEventListener('click',()=>show(current-1)));
+['hobbies','dates','interest'].forEach(id=>{ document.querySelectorAll(`#${id} .choice`).forEach(btn=>btn.addEventListener('click',()=>{ const set=selections[id]; const val=btn.dataset.value; if(set.has(val)){set.delete(val);btn.classList.remove('selected');btn.setAttribute('aria-pressed','false')}else{ if(id==='interest'){set.clear();document.querySelectorAll(`#${id} .choice`).forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')})} set.add(val);btn.classList.add('selected');btn.setAttribute('aria-pressed','true')} })); });
+function val(id){return document.getElementById(id).value.trim()}
+document.getElementById('makeReply').addEventListener('click',()=>{ const lines=['My tiny pitch-deck reply 💌','Name: '+(val('herName')||'Not shared'),'Age: '+(val('herAge')||'Not shared'),'Hobbies: '+([...selections.hobbies].join(', ')||'Not selected')+(val('otherHobby')?' · '+val('otherHobby'):''),'Ideal date: '+([...selections.dates].join(', ')||'Not selected')+(val('dateIdea')?' · '+val('dateIdea'):''),'My answer: '+([...selections.interest].join(', ')||'Not selected'),'Message: '+(val('message')||'No extra message')]; document.getElementById('replyText').textContent=lines.join('\n'); document.getElementById('replyWrap').hidden=false; document.getElementById('copied').textContent=''; });
+document.getElementById('copyReply').addEventListener('click',async()=>{const text=document.getElementById('replyText').textContent; try{await navigator.clipboard.writeText(text);document.getElementById('copied').textContent='Copied! Paste it into a message to send back.'}catch(e){const range=document.createRange();range.selectNodeContents(document.getElementById('replyText'));const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);document.getElementById('copied').textContent='Select the highlighted text and copy it.'}});
+document.getElementById('restart').addEventListener('click',()=>{document.querySelectorAll('input,textarea').forEach(x=>x.value='');Object.values(selections).forEach(s=>s.clear());document.querySelectorAll('.choice').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});document.getElementById('replyWrap').hidden=true;show(0)});
+</script>
+</body>
+</html>
